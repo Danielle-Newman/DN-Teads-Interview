@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <button onclick="reviewStatus()">Review Ads</button>
+
+    <script>
+        function reviewStatus(){
+            fetch("https://jsonplaceholder.typicode.com/posts")
+                .then(response => {
+                    if (!response.ok) { throw new Error("API Request Failed."); } // Throws an error if the API didn't return an ok status code
+                    return response.json();})
+
+                .then(data => {
+                    const posts = []; // Creating an empty array that will contain the posts from the JSON file
+
+                    data.forEach(post => { // Looping through each post from the JSON file and setting the status and title dependant on the post id
+                        if (post.id % 3 == 0) {
+                            post.status = "rejected"
+                            post.title = post.title.toUpperCase();
+                        }
+                        else if (post.id % 2 == 0) { post.status = "approved"; }
+                        else { post.status = "pending"; }
+
+                        posts.push({ // Adding the relevant data to our posts array
+                            id:post.id,
+                            status:post.status,
+                            title:post.title});
+                    });
+                    console.log(posts);
+                });
+        };
+    </script>
+</body>
+</html>
